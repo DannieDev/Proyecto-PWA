@@ -1,5 +1,5 @@
 {
-  "name": "Mi PWA Con",
+  "name": "Mi PWA",
   "short_name": "Mi PWA",
   "description": "Aplicación Progresiva con Vite + React + TypeScript",
   "start_url": "/",
