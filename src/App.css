@@ -40,3 +40,37 @@
 .read-the-docs {
   color: #888;
 }
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  margin: 0 0.5rem;
+}
+
+.status.online {
+  background: #4CAF50;
+  color: white;
+}
+
+.status.offline {
+  background: #F44336;
+  color: white;
+}
+
+.install-btn {
+  background: white;
+  color: #2F3BA2;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  margin: 0 0.5rem;
+}
+
+.pwa-info {
+  background: #f5f5f5;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+}
