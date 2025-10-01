@@ -1,6 +1,6 @@
 {
-  "name": "Mi PWA",
-  "short_name": "Mi PWA",
+  "name": "Why?",
+  "short_name": "Why?",
   "description": "Aplicación Progresiva con Vite + React + TypeScript",
   "start_url": "/",
   "display": "standalone",
@@ -8,18 +8,39 @@
   "background_color": "#ffffff",
   "icons": [
     {
+      "src": "icons/icon-171x171.png",
+      "sizes": "171x171",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+        {
+      "src": "icons/icon-310x310.png",
+      "sizes": "310x310",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-192x192.png",
-      "sizes": "512x512",
+      "src": "icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-96x96.png",
+      "sizes": "96x96",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
-  "categories": ["education", "productivity"],
+  "categories": [
+    "education",
+    "productivity"
+  ],
   "lang": "es-MX"
 }
