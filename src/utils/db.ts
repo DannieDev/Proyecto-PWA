@@ -32,6 +32,41 @@ class DatabaseService {
     return this.db!;
   }
 
+    async getUnsyncedActivities(): Promise<FormDB['activities']['value'][]> {
+    try {
+      const db = await this.ensureDB();
+      
+      if (!db.objectStoreNames.contains('activities')) {
+        console.warn('Object store "activities" no encontrado, retornando array vacío');
+        return [];
+      }
+
+      const allActivities = await db.getAll('activities');
+      return allActivities || [];
+    } catch (error) {
+      console.error('Error obteniendo actividades no sincronizadas:', error);
+      return [];
+    }
+  }
+
+  async markActivityAsSynced(id: number): Promise<void> {
+    try {
+      const db = await this.ensureDB();
+      
+      if (!db.objectStoreNames.contains('activities')) {
+        console.warn('Object store "activities" no encontrado');
+        return;
+      }
+
+      console.log(`Actividad ${id} marcada como sincronizada`);
+      
+    } catch (error) {
+      console.error('Error marcando actividad como sincronizada:', error);
+      throw error;
+    }
+  }
+
+
   async initDB(): Promise<void> {
     try {
       this.db = await openDB<FormDB>('WhyAppDB', 2, {

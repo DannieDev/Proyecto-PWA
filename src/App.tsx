@@ -13,7 +13,7 @@ function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [currentView, setCurrentView] = useState<'home' | 'form' | 'list'>('home')
   const [showOfflinePage, setShowOfflinePage] = useState<boolean>(false)
-  
+
   // Estados para notificaciones push
   const [pushSupported, setPushSupported] = useState<boolean>(false)
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default')
@@ -83,7 +83,7 @@ function App() {
       const registration = await navigator.serviceWorker.ready
       const existingSubscription = await registration.pushManager.getSubscription()
       setSubscription(existingSubscription)
-      
+
       if (existingSubscription) {
         console.log('Ya suscrito a notificaciones')
       }
@@ -96,27 +96,27 @@ function App() {
     try {
       const permission = await Notification.requestPermission()
       setNotificationPermission(permission)
-      
+
       if (permission !== 'granted') {
         alert('Los permisos de notificación son necesarios para recibir alertas importantes.')
         return
       }
 
       const registration = await navigator.serviceWorker.ready
-      
-      // Suscribir al usuario
-      const subscription = await registration.pushManager.subscribe({
+
+      // Cambia el nombre de la variable local
+      const newSubscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
       })
 
-      setSubscription(subscription)
+      setSubscription(newSubscription)
 
-      
-      await sendSubscriptionToBackend(subscription)
-      
+
+      await sendSubscriptionToBackend(newSubscription)
+
       alert('¡Notificaciones activadas! Recibirás alertas importantes.')
-      
+
     } catch (error) {
       console.error('Error suscribiendo a notificaciones:', error)
       alert('Error activando notificaciones. Intenta nuevamente.')
@@ -127,7 +127,7 @@ function App() {
     try {
       const registration = await navigator.serviceWorker.ready
       const existingSubscription = await registration.pushManager.getSubscription()
-      
+
       if (existingSubscription) {
         await existingSubscription.unsubscribe()
         setSubscription(null)
@@ -138,43 +138,39 @@ function App() {
     }
   }
 
-  function urlBase64ToUint8Array(base64String: string): Uint8Array {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
-    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
-    const rawData = window.atob(base64)
-    const outputArray = new Uint8Array(rawData.length)
-    
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i)
-    }
-    return outputArray
-  }
-
- async function sendSubscriptionToBackend(subscription: PushSubscription) {
+ function urlBase64ToUint8Array(base64String: string): ArrayBuffer {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
+  const rawData = window.atob(base64)
   
-  try {
+  const buffer = new ArrayBuffer(rawData.length)
+  const bytes = new Uint8Array(buffer)
+  
+  for (let i = 0; i < rawData.length; i++) {
+    bytes[i] = rawData.charCodeAt(i)
+  }
+  
+  return buffer
+}
 
+async function sendSubscriptionToBackend(subscription: PushSubscription) {
+  try {
+    console.log('Enviando suscripción al backend:', subscription);
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
   } catch (error) {
-      console.log('No se pudo conectar al backend, pero la suscripción está activa localmente')
+    console.log('No se pudo conectar al backend, pero la suscripción está activa localmente')
   }
 }
 
   const testNotification = async () => {
     if ('serviceWorker' in navigator && Notification.permission === 'granted') {
       const registration = await navigator.serviceWorker.ready
-      
+
       registration.showNotification('Why? - Prueba Exitosa', {
         body: '¡Las notificaciones push están funcionando correctamente! Ahora recibirás alertas importantes.',
         icon: '/icons/icon-192x192.png',
         badge: '/icons/icon-192x192.png',
-        tag: 'test-notification',
-        actions: [
-          { action: 'open', title: 'Abrir App' },
-          { action: 'close', title: 'Cerrar' }
-        ],
-        vibrate: [200, 100, 200]
+        tag: 'test-notification'
       })
     } else {
       alert('Primero activa las notificaciones o verifica los permisos.')
@@ -202,14 +198,14 @@ function App() {
           <p>No tenemos conexión a internet en este momento. Pero no te preocupes, tus datos están guardados localmente.</p>
           <p>Puedes seguir usando la aplicación de forma limitada y tus cambios se sincronizarán cuando recuperes la conexión.</p>
           <div className="offline-actions">
-            <button 
-              className="offline-btn" 
+            <button
+              className="offline-btn"
               onClick={() => setShowOfflinePage(false)}
             >
               Intentar usar la app
             </button>
-            <button 
-              className="offline-btn secondary" 
+            <button
+              className="offline-btn secondary"
               onClick={() => window.location.reload()}
             >
               Reintentar conexión
@@ -272,13 +268,13 @@ function App() {
                         <div className="notification-active">
                           <p>Notificaciones activadas</p>
                           <div className="notification-buttons">
-                            <button 
+                            <button
                               className="notification-btn active"
                               onClick={unsubscribeFromNotifications}
                             >
                               Desactivar Notificaciones
                             </button>
-                            <button 
+                            <button
                               className="notification-btn test"
                               onClick={testNotification}
                             >
@@ -288,7 +284,7 @@ function App() {
                         </div>
                       ) : (
                         <div className="notification-inactive">
-                          <button 
+                          <button
                             className="notification-btn"
                             onClick={subscribeToNotifications}
                           >
@@ -324,10 +320,10 @@ function App() {
             <span className={`status ${isOnline ? 'online' : 'offline'}`}>
               {isOnline ? 'En línea' : 'Sin conexión'}
             </span>
-            
+
             {/* Controles de notificación en el header */}
             {pushSupported && notificationPermission === 'granted' && subscription && (
-              <button 
+              <button
                 className="notification-header-btn"
                 onClick={testNotification}
                 title="Probar notificación"
@@ -335,7 +331,7 @@ function App() {
                 Probar
               </button>
             )}
-            
+
             {showInstallButton && (
               <button className="install-btn" onClick={handleInstallClick}>
                 Instalar App
@@ -343,22 +339,22 @@ function App() {
             )}
           </div>
         </div>
-        
+
         {/* Navegación principal */}
         <nav className="main-nav">
-          <button 
+          <button
             onClick={() => setCurrentView('home')}
             className={currentView === 'home' ? 'active' : ''}
           >
             Inicio
           </button>
-          <button 
+          <button
             onClick={() => setCurrentView('form')}
             className={currentView === 'form' ? 'active' : ''}
           >
             Nuevo Reporte
           </button>
-          <button 
+          <button
             onClick={() => setCurrentView('list')}
             className={currentView === 'list' ? 'active' : ''}
           >
@@ -370,7 +366,7 @@ function App() {
       <main className="app-main">
         {renderContent()}
       </main>
-      
+
       <footer className="app-footer">
         <p>© 2025 Why?</p>
       </footer>
