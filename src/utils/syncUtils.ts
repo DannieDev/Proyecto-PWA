@@ -8,11 +8,6 @@ interface Activity {
   synced?: boolean;
 }
 
-interface SyncManager {
-  register(tag: string): Promise<void>;
-  getTags(): Promise<string[]>;
-}
-
 class SyncUtils {
   isBackgroundSyncSupported(): boolean {
     return 'serviceWorker' in navigator && 'SyncManager' in window;
