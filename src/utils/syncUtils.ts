@@ -13,17 +13,6 @@ interface SyncManager {
   getTags(): Promise<string[]>;
 }
 
-interface ServiceWorkerRegistration {
-  sync?: SyncManager;
-}
-
-interface Window {
-  SyncManager?: {
-    prototype: SyncManager;
-    new(): SyncManager;
-  };
-}
-
 class SyncUtils {
   isBackgroundSyncSupported(): boolean {
     return 'serviceWorker' in navigator && 'SyncManager' in window;

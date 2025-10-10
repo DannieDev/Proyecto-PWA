@@ -38,25 +38,32 @@ export const ActivityForm: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    try {
-      await dbService.addActivity(formData);
+try {
+  await dbService.addActivity(formData);
 
-      if (isOnline) {
-        alert('Reporte guardado correctamente (tienes conexión)');
-      } else {
-        if ('serviceWorker' in navigator && 'SyncManager' in window) {
-          try {
-            const registration = await navigator.serviceWorker.ready;
-            await registration.sync.register('sync-offline-activities');
-            alert('Reporte guardado en modo offline. Se sincronizará automáticamente cuando recuperes la conexión.');
-          } catch (syncError) {
-            console.error('Error registrando sync:', syncError);
-            alert('Reporte guardado en modo offline. Sincroniza manualmente más tarde.');
-          }
+  if (isOnline) {
+    alert('Reporte guardado correctamente (tienes conexión)');
+  } else {
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+
+        if (registration.sync) {
+          await registration.sync.register('sync-offline-activities');
+          alert('Reporte guardado en modo offline. Se sincronizará automáticamente cuando recuperes la conexión.');
         } else {
-          alert('Reporte guardado en modo offline. Tu navegador no soporta sincronización automática.');
+          console.warn('SyncManager no disponible en este Service Worker');
+          alert('Reporte guardado en modo offline. Sincroniza manualmente cuando tengas conexión.');
         }
+        
+      } catch (syncError) {
+        console.error('Error registrando sync:', syncError);
+        alert('Reporte guardado en modo offline. Sincroniza manualmente más tarde.');
       }
+    } else {
+      alert('Reporte guardado en modo offline. Tu navegador no soporta sincronización automática.');
+    }
+  }
 
       setFormData({
         studentName: '',

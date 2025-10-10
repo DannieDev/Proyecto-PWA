@@ -14,13 +14,11 @@ function App() {
   const [currentView, setCurrentView] = useState<'home' | 'form' | 'list'>('home')
   const [showOfflinePage, setShowOfflinePage] = useState<boolean>(false)
 
-  // Estados para notificaciones push
   const [pushSupported, setPushSupported] = useState<boolean>(false)
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default')
   const [subscription, setSubscription] = useState<PushSubscription | null>(null)
 
   useEffect(() => {
-    // Manejo de PWA
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault()
       setDeferredPrompt(e)
@@ -32,7 +30,6 @@ function App() {
       setShowInstallButton(false)
     })
 
-    // Manejo de conexión
     const handleOnline = () => {
       setIsOnline(true)
       setShowOfflinePage(false)
@@ -45,7 +42,6 @@ function App() {
       }
     }
 
-    // Verificar estado inicial de conexión
     if (!navigator.onLine) {
       setShowOfflinePage(true)
     }
