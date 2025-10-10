@@ -1,0 +1,38 @@
+1.INSTALA 
+
+npm install -g web-push
+
+
+2.GENERA TUS VAPID EN LA CONSOLA DE TU TERMINAL
+
+web-push generate-vapid-keys 
+
+3.EN App.tsx REEMPLAZA VAPID_PUBLIC_KEY CON TU VAPID REAL
+
+4.EN LA CONSOLA DE TU NAVEGADOR EJECUTA EL SIGUIENTE COMANDO:
+
+navigator.serviceWorker.ready.then(async (reg) => {
+  const sub = await reg.pushManager.getSubscription();
+  if (sub) {
+    const subJson = sub.toJSON();
+    console.log('Endpoint:', subJson.endpoint);
+    console.log('p256dh:', subJson.keys.p256dh);
+    console.log('auth:', subJson.keys.auth);
+  } else {
+    console.log('Primero activa las notificaciones en la app');
+  }
+});
+
+5.REEMPLAZA EN send-push.js:
+
+TU_CLAVE_PUBLICA_VAPID_AQUI
+
+TU_CLAVE_PRIVADA_VAPID_AQUI
+
+TU_KEY_P256DH_AQUI...
+
+TU_AUTH_KEY_AQUI...
+
+6.EJECUTA EL SIGUIENTE SCRIPT
+
+node send-push.js

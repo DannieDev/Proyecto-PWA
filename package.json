@@ -1,5 +1,5 @@
 {
-  "name": "my-pwa",
+  "name": "Why?",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,6 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "postinstall": "husky install"
-
   },
   "dependencies": {
     "react": "^19.1.1",
@@ -30,6 +29,7 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2",
+    "web-push": "^3.6.7",
     "workbox-cli": "^7.3.0"
   }
 }
