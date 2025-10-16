@@ -4,7 +4,7 @@ import { ActivitiesList } from './components/ActivitiesList'
 import './App.css'
 import './styles/OfflineForm.css'
 
-const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+const VAPID_PUBLIC_KEY = 'BEs4VudqIVuiwhLWG7OytY7M3bcwNYGLnJCJiu7LkzguWkXt6p_JQ6xzchL3BMGw50sBCoooDZw-6LMjSqlwCbA';
 
 function App() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
