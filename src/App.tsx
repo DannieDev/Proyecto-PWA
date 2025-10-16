@@ -4,8 +4,7 @@ import { ActivitiesList } from './components/ActivitiesList'
 import './App.css'
 import './styles/OfflineForm.css'
 
-// Reemplaza esta clave con tu VAPID Public Key real
-const VAPID_PUBLIC_KEY = 'TU_CLAVE_PUBLICA_VAPID';
+const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
 function App() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null)

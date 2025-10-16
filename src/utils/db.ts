@@ -66,7 +66,6 @@ class DatabaseService {
     }
   }
 
-
   async initDB(): Promise<void> {
     try {
       this.db = await openDB<FormDB>('WhyAppDB', 2, {
